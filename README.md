@@ -1,4 +1,4 @@
-# Real-Time Orders Validation & Customer Analytics Pipeline
+# Retail Orders Ingestion & Validation Pipeline
 ### Azure Data Factory · Databricks · ADLS Gen2 · Azure Key Vault · Azure SQL DB · PySpark · Delta Lake
 
 ---
