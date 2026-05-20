@@ -5,7 +5,7 @@
 
 ## About this project
 
-This is a personal project I built in my own time while upskilling toward the Databricks Spark Developer certification. Rather than just doing cert prep, I wanted to build something end-to-end on Azure that reflects how I'd approach a real ingestion problem — event-driven triggering, cross-cloud data movement, proper secret management, and an audit trail. The kind of things that don't show up in certification prep but matter in production.
+This is a personal project I built in my own time while upskilling toward the Databricks Associate Developer certification. Rather than just doing cert prep, I wanted to build something end-to-end on Azure that reflects how I'd approach a real ingestion problem — event-driven triggering, cross-cloud data movement, proper secret management, and an audit trail. The kind of things that don't show up in certification prep but matter in production.
 
 The dataset is a retail orders domain (68,882 orders, 12,435 customers) which gave enough real-world messiness to surface an actual bug during testing — a `CANCELED` vs `CANCELLED` spelling mismatch that would have silently discarded ~2% of valid orders on every pipeline run. More on that below.
 
@@ -28,30 +28,30 @@ If any check fails, the file is quarantined with a machine-readable error report
 
 ```
 ┌─────────────────────┐
-│  Third Party Service │
-│  (orders.csv)        │
+│  Third Party Service│
+│  (orders.csv)       │
 └──────────┬──────────┘
            │ file drop
            ▼
 ┌─────────────────────┐         Storage Event          ┌────────────────────────┐
-│     ADLS Gen2        │ ──────── Trigger ────────────▶ │   Azure Data Factory   │
-│     /landing         │                                │   (Orchestration)      │
+│     ADLS Gen2       │ ──────── Trigger ────────────▶ │   Azure Data Factory   │
+│     /landing        │                                │   (Orchestration)      │
 └─────────────────────┘                                └───────────┬────────────┘
                                                                    │
                                               ┌────────────────────┼────────────────────┐
                                               │                    │                    │
                                     ┌─────────▼──────┐  ┌─────────▼──────┐  ┌──────────▼──────┐
-                                    │  Copy Activity  │  │   Databricks   │  │  Amazon S3      │
-                                    │  S3 → ADLS Gen2 │  │   Notebook     │  │  order_items    │
-                                    │  (JSON → CSV)   │  │   (PySpark)    │  │  (JSON)         │
+                                    │  Copy Activity │  │   Databricks   │  │  Amazon S3      │
+                                    │  S3 → ADLS Gen2│  │   Notebook     │  │  order_items    │
+                                    │  (JSON → CSV)  │  │   (PySpark)    │  │  (JSON)         │
                                     └────────────────┘  └────────┬───────┘  └─────────────────┘
                                                                   │
                                    ┌──────────────────────────────┼──────────────────────────┐
                                    │                              │                          │
                          ┌─────────▼──────┐            ┌─────────▼──────┐        ┌──────────▼──────┐
-                         │  ADLS Gen2      │            │  Azure SQL DB   │        │  ADLS Gen2      │
-                         │  /staging       │            │  Audit Log +    │        │  /discarded     │
-                         │  (clean files)  │            │  Results Table  │        │  + Quality Rpt  │
+                         │  ADLS Gen2     │            │  Azure SQL DB   │        │  ADLS Gen2      │
+                         │  /staging      │            │  Audit Log +    │        │  /discarded     │
+                         │  (clean files) │            │  Results Table  │        │  + Quality Rpt  │
                          └────────────────┘            └────────────────┘        └─────────────────┘
 ```
 
