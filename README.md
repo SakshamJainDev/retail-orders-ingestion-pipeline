@@ -49,9 +49,9 @@ If any check fails, the file is quarantined with a machine-readable error report
                                    ┌──────────────────────────────┼──────────────────────────┐
                                    │                              │                          │
                          ┌─────────▼──────┐            ┌─────────▼──────┐        ┌──────────▼──────┐
-                         │  ADLS Gen2     │            │  Azure SQL DB   │        │  ADLS Gen2      │
-                         │  /staging      │            │  Audit Log +    │        │  /discarded     │
-                         │  (clean files) │            │  Results Table  │        │  + Quality Rpt  │
+                         │  ADLS Gen2     │            │  Azure SQL DB  │        │  ADLS Gen2      │
+                         │  /staging      │            │  Audit Log +   │        │  /discarded     │
+                         │  (clean files) │            │  Results Table │        │  + Quality Rpt  │
                          └────────────────┘            └────────────────┘        └─────────────────┘
 ```
 
